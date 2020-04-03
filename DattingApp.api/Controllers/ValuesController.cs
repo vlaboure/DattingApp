@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DattingApp.api.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ namespace DatingApp.API.Controllers
 {
 
     //http port :5000/api/values
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
@@ -33,14 +35,13 @@ namespace DatingApp.API.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         // GET api/values/5
         [HttpGet("{id}")]
         public async Task <IActionResult> GetValue(int id)
         {          
              // ToListAsync --> propriété de entity pour travailler en asyncrone      
             var value = await _context.Values.FirstOrDefaultAsync(x=>x.Id == id);
-            value.Name = "nom changé";            
-            _context.SaveChanges();
             return Ok(value); 
         }
 

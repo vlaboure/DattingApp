@@ -1,0 +1,89 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using DattingApp.api.Data;
+using DattingApp.api.Dtos;
+using DattingApp.api.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+
+namespace DattingApp.api.Controllers
+{  
+    [Route("api/[controller]")]
+    //[apiController]--> très important évite des contrôles et des [FromBody]...&
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        private readonly IAuthRepository _rep;
+        private readonly IConfiguration _config;
+
+        public AuthController(IAuthRepository rep,IConfiguration config)
+        {
+            _rep = rep;
+            _config = config;
+        }
+
+        [HttpPost("register")]
+        /*
+            UsersForRegisterDto userForRegisterDto==> si pas de [apiController]---> obligation de mettre [FromBody]
+        */
+        public async Task<IActionResult> Register(UsersForRegisterDto userForRegisterDto)
+        {   
+
+                    // !! si pas de [apiController]---> test necessaire
+                   /*
+                    if(!ModelState.IsValid)
+                        return BadRequest(ModelState);
+                    */ 
+            userForRegisterDto.UserName =  userForRegisterDto.UserName.ToLower();
+            if(await _rep.UserExists(userForRegisterDto.UserName))//utilisation du repo AuthRepository
+                return BadRequest("user exists");
+           
+            var userToCreate = new User
+            {
+                UserName = userForRegisterDto.UserName,
+            };
+            //utilisation du repo AuthRepository
+            var createdUser = await _rep.Register(userToCreate, userForRegisterDto.Password);
+            return StatusCode(201);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
+        {
+            var userFromRepo = await _rep.Login(userForLoginDto.UserName.ToLower(),userForLoginDto.Password);
+            if(userFromRepo == null)
+                return Unauthorized();
+                // login accepté
+            //tableau pour le corps de token            
+            var claims = new[]
+            {   //id --> ClaimTypes.NameIdentifier
+                new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
+                //UserName -->ClaimTypes.Name
+                new Claim(ClaimTypes.Name,userFromRepo.UserName)
+            };
+                //création de la clé en encodant la valeur de token dans AppSettings
+            // clé de cryptage :
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
+            // cryptage
+            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
+            //écriture dans la variable pour le jeton
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+            //jwt ---> jeton jwtSecurityTokenHandler --> handler de jeton
+            var tokenHandler = new JwtSecurityTokenHandler();
+            // création du token
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return Ok(new{
+                token = tokenHandler.WriteToken(token)
+            });
+        }
+    }
+}
