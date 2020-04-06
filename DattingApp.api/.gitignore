@@ -4,3 +4,4 @@ obj
 *.db
 *.txt
 *.docx
+appsettings.json

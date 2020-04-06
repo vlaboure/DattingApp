@@ -1,0 +1,31 @@
+<form #registerForm="ngForm" (ngSubmit)="register()">
+  <h2 class="text-center text-primary">Sign Up</h2>
+  <hr>
+
+  <div class="form-group">
+    <input type="text" class="form-control" required name="userName"
+    [(ngModel)]="model.userName" placeholder="Username">
+  </div>
+
+  <!-- <div class="form-group">
+    <label for="favorite-value">Votre valeur préférée</label>
+    <select name="" id="favorite-value" class="form-control"> -->
+        <!--********[value]-> pour option select-option-value -->
+        <!--******* "value"-> valeur de la boucle *ngFor -->
+        <!--******** values -> passé à app-regiser avec :
+              **<app-register [valuesFromHome] = "values"></app-register> -->
+      <!-- <option *ngFor="let value of valuesFromHome" [value]="value">{{value.name}}</option>
+    </select> -->
+  <!-- </div> -->
+
+  <div class="form-group">
+    <input type="password" class="form-control" required name= "Password"
+    [(ngModel)]="model.Password" placeholder="Password">
+  </div>
+
+  <div class="form-group text-center">
+    <button class="btn btn-success" type="submit">Register</button>
+    <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
+  </div>
+  
+</form>

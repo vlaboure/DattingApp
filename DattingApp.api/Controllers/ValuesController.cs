@@ -23,6 +23,7 @@ namespace DatingApp.API.Controllers
             _context = context;
 
         }
+        [AllowAnonymous]
         // GET api/values
         [HttpGet]
         //public ActionResult<IEnumerable<string>> Get()
@@ -44,6 +45,7 @@ namespace DatingApp.API.Controllers
             var value = await _context.Values.FirstOrDefaultAsync(x=>x.Id == id);
             return Ok(value); 
         }
+
 
         // POST api/values
         [HttpPost]
