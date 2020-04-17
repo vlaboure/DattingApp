@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DattingApp.api.Data;
+using DattingApp.api.helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,10 +37,14 @@ namespace DattingApp.api
         {
             // les services sont configurés dans void Configure
             services.AddDbContext<DataContext>(X=>X.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(opt=>{
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
             services.AddCors();//ajout service pour le passage d'un port à un autre      
             //le service est configuré dans Data      
+            services.AddAutoMapper(typeof(DattingRepository).Assembly);//ou typeof(Startup)
             services.AddScoped<IAuthRepository,AuthRepository>();
+            services.AddScoped<IDattingRepository,DattingRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=>{
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -55,8 +64,22 @@ namespace DattingApp.api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }else
+            {
+                // l'utilisation de l'expression lambda permet l'accès à l'erreur avant la réponse du serveur
+                app.UseExceptionHandler(builder =>{
+                    builder.Run(async context =>{
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        // récup de la requète de builder.features<IFeatureCollection>
+                                //IExceptionHandlerFeature --> use Microsoft.AspNetCore.Diagnostics
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        if (error != null)
+                            context.Response.AddApplicationHelper(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message);                       
+                    });
+                }); 
             }
- 
+
            // app.UseHttpsRedirection();---> pas de https
  
             app.UseRouting();

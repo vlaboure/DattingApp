@@ -1,0 +1,56 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <img src="{{user.photoUrl}}" alt="{{user.knownAs}}" class="card-img-top img-thumbnail">
+      
+        <div class="card-body">
+          <div>
+            <strong>Location</strong>
+            <p>{{user.city}}, {{user.country}}</p>
+          </div>
+          <div>
+            <strong>Age</strong>
+            <p>{{user.age}}</p>
+          </div>
+          <div>
+            <strong>Last active</strong>
+            <p>{{user.lastActive}}</p>
+          </div>
+          <div>
+            <strong>Create</strong>
+            <p>{{user.created}}</p>
+          </div>
+
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary">Like</button>
+          <button class="btn btn-success">Message</button>
+        </div>
+      </div>  
+    </div>
+    <!-- ici on fait un container avec des onglets tabmodule -->
+      <div class="col-sm-8">
+        <div class="tab-panel">
+          <tabset class="member-tabset">
+            <tab heading="A propos {{user.knownAs}}">
+              <h4>Description ?</h4>
+              <p>{{user.introduction}}</p>
+              <h4>Vous cherchez ?</h4>
+              <p>{{user.lookingFor}}</p>
+            </tab>     
+            <tab heading="Centes d'intérêt">
+              <h4>Intérêt</h4>
+              <p>{{user.interest}}</p>
+            </tab>    
+            <tab heading="Photos">
+              <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+            </tab>    
+            <tab heading="Messages">
+              <p>Messages ici</p>
+            </tab>
+          </tabset>
+        </div>
+      </div>
+    </div>
+  </div>

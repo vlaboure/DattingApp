@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DattingApp.api.Dtos
 {
+    //DTO == Data Transfet Object
+        // supplément aux models qui représentent la BDD
+        // pour les données nécessaires pour l'affichage
     public class UsersForRegisterDto
     {
         [Required]
