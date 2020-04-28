@@ -20,7 +20,11 @@ namespace DattingApp.api.helpers
                             src.Photos.FirstOrDefault(p => p.IsMain).Url))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => 
                             src.DateOfBirth.CalcAge()));           
-            CreateMap<Photo,PhotoForDetailDto>();            
+            CreateMap<Photo,PhotoForDetailDto>(); //source - destination    
+            CreateMap<UserForUpdateDto,User>();  //source - destination     
+            CreateMap<Photo,PhotoForReturnDto>();//source - destination
+            CreateMap<PhotoForCreationDto,Photo>();
+      //      CreateMap<UserForListDto,User>();
         }
     }
 }

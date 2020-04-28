@@ -12,14 +12,15 @@ export class NavComponent implements OnInit {
   [x: string]: any;
   // pour récupérer les valeurs depuis navcomponent.html
   model: any = {};
-
+  photoUrl: string;
   constructor(
     public authService: AuthService,
     private alertify: AlertifyService,
     private router: Router) { }
 
+    // charger la photo user.png avec observable
   ngOnInit() {
-
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
   login(){
     // il faut souscrire au service avec le this.model
@@ -37,6 +38,9 @@ export class NavComponent implements OnInit {
 
   logOut(){
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.authService.decodedToken = null;
+    this.authService.currentUser = null;
     console.log('logged out');
     this.router.navigate(['/home']); 
   }

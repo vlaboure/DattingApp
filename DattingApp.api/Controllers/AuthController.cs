@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DattingApp.api.Data;
 using DattingApp.api.Dtos;
 using DattingApp.api.Models;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DattingApp.api.Controllers
-{  
+{
     [Route("api/[controller]")]
     //[apiController]--> très important évite des contrôles et des [FromBody]...&
     [ApiController]
@@ -19,9 +20,11 @@ namespace DattingApp.api.Controllers
     {
         private readonly IAuthRepository _rep;
         private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
-        public AuthController(IAuthRepository rep,IConfiguration config)
+        public AuthController(IAuthRepository rep, IConfiguration config, IMapper mapper)
         {
+            _mapper = mapper;
             _rep = rep;
             _config = config;
         }
@@ -31,17 +34,17 @@ namespace DattingApp.api.Controllers
             UsersForRegisterDto userForRegisterDto==> si pas de [apiController]---> obligation de mettre [FromBody]
         */
         public async Task<IActionResult> Register(UsersForRegisterDto userForRegisterDto)
-        {   
+        {
 
-                    // !! si pas de [apiController]---> test necessaire
-                   /*
-                    if(!ModelState.IsValid)
-                        return BadRequest(ModelState);
-                    */ 
-            userForRegisterDto.UserName =  userForRegisterDto.UserName.ToLower();
-            if(await _rep.UserExists(userForRegisterDto.UserName))//utilisation du repo AuthRepository
+            // !! si pas de [apiController]---> test necessaire
+            /*
+             if(!ModelState.IsValid)
+                 return BadRequest(ModelState);
+             */
+            userForRegisterDto.UserName = userForRegisterDto.UserName.ToLower();
+            if (await _rep.UserExists(userForRegisterDto.UserName))//utilisation du repo AuthRepository
                 return BadRequest("user exists");
-           
+
             var userToCreate = new User
             {
                 UserName = userForRegisterDto.UserName,
@@ -53,11 +56,11 @@ namespace DattingApp.api.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
-        {              
-            var userFromRepo = await _rep.Login(userForLoginDto.UserName.ToLower(),userForLoginDto.Password);
-            if(userFromRepo == null)
+        {
+            var userFromRepo = await _rep.Login(userForLoginDto.UserName.ToLower(), userForLoginDto.Password);
+            if (userFromRepo == null)
                 return Unauthorized();
-                // login accepté
+            // login accepté
             //tableau pour le corps de token            
             var claims = new[]
             {   //id --> ClaimTypes.NameIdentifier
@@ -65,11 +68,11 @@ namespace DattingApp.api.Controllers
                 //UserName -->ClaimTypes.Name
                 new Claim(ClaimTypes.Name,userFromRepo.UserName)
             };
-                //création de la clé en encodant la valeur de token dans AppSettings
+            //création de la clé en encodant la valeur de token dans AppSettings
             // clé de cryptage :
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
             // cryptage
-            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             //écriture dans la variable pour le jeton
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -81,8 +84,13 @@ namespace DattingApp.api.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             // création du token
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return Ok(new{
-                token = tokenHandler.WriteToken(token)
+
+    //********* pour photo dans la barre menu map de userFromRepo avec UserForListDto --> photoUrl
+            var user = _mapper.Map<UserForListDto>(userFromRepo);
+    //*************************************************** 
+            return Ok(new
+            {   // ajout du user au token
+                token = tokenHandler.WriteToken(token),user
             });
         }
     }

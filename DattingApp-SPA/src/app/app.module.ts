@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/Http';
 import { JwtModule } from '@auth0/angular-jwt'; // a mettre en tête
 import {FormsModule} from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { FileUploadModule } from 'ng2-file-upload';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -25,6 +26,10 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { AlertifyService } from './_services/alertify.service';
 import { MemberDetailResolver } from './_resolver/member-detail-resolver';
 import { MemberListResolver } from './_resolver/member-list-resolver';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { MemberEditResolver } from './_resolver/member-edit-resolver';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes';
+import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 
 
 
@@ -51,7 +56,9 @@ export class CustomHammerConfig extends HammerGestureConfig{
       ListsComponent,
       MessagesComponent,
       MemberCardComponent,
-      MemberDetailComponent
+      MemberDetailComponent,
+      MemberEditComponent,
+      PhotoEditorComponent
    ],
    imports: [
       /****** utilier .froRoot permet de créer un singleton
@@ -59,12 +66,13 @@ export class CustomHammerConfig extends HammerGestureConfig{
        */
       BrowserModule,
       HttpClientModule,
+      NgxGalleryModule,
       FormsModule,
       BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
       TabsModule.forRoot(),
       RouterModule.forRoot(appRoutes),
-      NgxGalleryModule,
+      FileUploadModule,
       JwtModule.forRoot({
          config: {
            // indique routes autorisées et lancées au demarrage
@@ -81,6 +89,8 @@ export class CustomHammerConfig extends HammerGestureConfig{
       UserService,
       MemberDetailResolver,
       MemberListResolver,
+      MemberEditResolver,
+      PreventUnsavedChanges,
       {provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig}
    ],
    bootstrap: [

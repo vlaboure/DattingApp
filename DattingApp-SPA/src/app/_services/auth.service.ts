@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/Http';
+import {BehaviorSubject } from 'rxjs';
 import {map} from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
+import { User } from '../_models/User';
+
 
 /**************************************************************************************************/
               /****service injecté pour le login */
@@ -13,9 +16,16 @@ export class AuthService {
   baseUrl  = environment.apiUrl + 'auth/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
+  currentUser: User;
+    // photo par defaut peut être changée et est initalisée au démarrage
+  photoUrl = new BehaviorSubject<string>('../../assets/user.png');
+  currentPhotoUrl = this.photoUrl.asObservable();
 // tslint:disable-next-line: typedef-whitespace
 constructor(private Http : HttpClient) { }
 
+changeMemberPhoto(photoUrl: string){
+  this.photoUrl.next(photoUrl);
+}
 // tslint:disable-next-line: whitespace
 // tslint:disable-next-line: typedef-whitespace
 
@@ -30,9 +40,12 @@ constructor(private Http : HttpClient) { }
         if (user){
                   // le token est enregistré en local pour les connexions futures
           localStorage.setItem('token', user.token);
+          localStorage.setItem('user', JSON.stringify(user.user));
           // user ---> token dans le http envoyé par le serveur
+          this.currentUser = user.user;
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          console.log(this.decodedToken);
+          this.changeMemberPhoto(this.currentUser.photoUrl);
+
         }
       })
     // tslint:disable-next-line: semicolon

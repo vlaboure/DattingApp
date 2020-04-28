@@ -27,9 +27,18 @@ constructor(private http: HttpClient) { }
     // si pas de  JwtModule.forRoot dans app.module--> get doit contenir option pour token
     return this.http.get<User[]>(environment.apiUrl + 'users');
   }
-  getUser(id): Observable<User>{
+  getUser(id: number): Observable<User>{
     // il faut typer le retrun <User[]>car get retourne un object et pas un user
         // si pas de  JwtModule.forRoot dans app.module--> get doit contenir option pour token
     return this.http.get<User>(environment.apiUrl + 'users/' + id);
   }
+  
+  updateUser(id: number,user: User){
+    return this.http.put(this.baseUrl + 'users/' + id, user);
+  }
+
+  setMainPhoto(userId: number, id: number){
+    return this.http.post(this.baseUrl + 'users/' + userId + '/photos/' + id + '/setMain', {});
+  }
+
 }

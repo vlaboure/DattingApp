@@ -10,6 +10,8 @@ namespace DattingApp.api.Models
         public DateTime DateAdded { get; set;}
         // photo de profil
         public bool IsMain { get; set; }
+
+        public string PublicId { get; set; }
         //liaisons entre photo et user pour permettre la suppression en cascade
         public User User { get; set; }
         public int UserId { get; set; }

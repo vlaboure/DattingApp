@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using DattingApp.api.Data;
@@ -38,6 +40,20 @@ namespace DattingApp.api.Controllers
             // utilisation de automapp
             var userToReturn = _mapper.Map<UserForDetailDto>(user);
             return Ok(userToReturn);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
+        {
+            // vérif si le token correspond à l'id reçu dans la requête
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
+                return Unauthorized();
+            var userFromRepo = await _repo.GetUser(id);
+            // map paramètre source , paramètre dest
+            _mapper.Map(userForUpdateDto, userFromRepo);
+            if(await _repo.SaveAll())
+                return NoContent();      
+            throw new Exception($"Erreur sauvegarde id {id}");        
         }
 
     }

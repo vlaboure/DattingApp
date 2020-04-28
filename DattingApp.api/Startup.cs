@@ -43,6 +43,7 @@ namespace DattingApp.api
             services.AddCors();//ajout service pour le passage d'un port à un autre      
             //le service est configuré dans Data      
             services.AddAutoMapper(typeof(DattingRepository).Assembly);//ou typeof(Startup)
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddScoped<IAuthRepository,AuthRepository>();
             services.AddScoped<IDattingRepository,DattingRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=>{
@@ -85,7 +86,7 @@ namespace DattingApp.api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            //utilisation de la règle de routage AddCors
+            //utilisation de la règle de routage AddCors et de faire des requêtes inter-domaines
             app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
  
  
