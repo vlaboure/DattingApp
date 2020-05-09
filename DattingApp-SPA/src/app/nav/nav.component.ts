@@ -22,6 +22,7 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
+  
   login(){
     // il faut souscrire au service avec le this.model
       // subscribe(observer=>)

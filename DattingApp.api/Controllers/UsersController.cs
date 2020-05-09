@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DattingApp.api.Data;
 using DattingApp.api.Dtos;
+using DattingApp.api.helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DattingApp.api.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -25,15 +27,21 @@ namespace DattingApp.api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+            // [FromQuery] permet d'envoyer une requête sans les paramètres de pagination
+        public async Task<IActionResult> GetUsers([FromQuery]UserParameters parameters)
         {
-            var users = await _repo.GetUsers();
+            var users = await _repo.GetUsers(parameters);
             // users avec le mapping
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
+            // appel de la methode de helpers
+            // AddPagination comme this on l'appelle avec l'objet courant
+            // comme le GetUsers est changé, on accède aux paramètres de pages 
+            Response.AddPagination(users.CurrentPage, users.PageSize, 
+                                users.TotalCount, users.TotalPages);
             return Ok(usersToReturn);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await _repo.GetUser(id);

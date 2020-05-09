@@ -24,6 +24,7 @@ export class AuthService {
 constructor(private Http : HttpClient) { }
 
 changeMemberPhoto(photoUrl: string){
+  // next propriété des promises change la photo de l'objet par la photo en argument
   this.photoUrl.next(photoUrl);
 }
 // tslint:disable-next-line: whitespace
@@ -52,8 +53,8 @@ changeMemberPhoto(photoUrl: string){
     )
   }
 
-  register(model: any){
-    return this.Http.post(this.baseUrl + 'register', model);
+  register(user: User){
+    return this.Http.post(this.baseUrl + 'register', user);
   }
 
   //

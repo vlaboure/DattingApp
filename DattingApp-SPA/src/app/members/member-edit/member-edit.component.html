@@ -12,7 +12,7 @@
   <div class="row">  
     <div class="col-sm-4">
       <div class="card">
-        <img src="{{photoUrl}}" alt="{{user.knownAs}}" class="card-img-top img-thumbnail">
+        <img src="{{photoUrl || '../../../assets/user.png'}}" alt="{{user.knownAs}}" class="card-img-top img-thumbnail">
       
         <div class="card-body">
           <div>
@@ -25,11 +25,11 @@
           </div>
           <div>
             <strong>Last active</strong>
-            <p>{{user.lastActive}}</p>
+            <p>{{user.lastActive | timeago}}</p>
           </div>
           <div>
             <strong>Create</strong>
-            <p>{{user.created}}</p>
+            <p>{{user.created | date: 'mediumDate'}}</p>
           </div>
 
         </div>
@@ -69,7 +69,7 @@
             <tab heading="Editer les photos">
                 <!-- on lie output getMemberPhotoChange de l'enfant photo-editor
                   à une méthode a ajouter dans le member-edit.component.ts  -->
-              <app-photo-editor [photos]="user.photos"
+              <app-photo-editor [photos]="user.photos"           
               (getMemeberPhotoChange)="updateMainPhoto($event)"></app-photo-editor>
             </tab>    
             </tabset>

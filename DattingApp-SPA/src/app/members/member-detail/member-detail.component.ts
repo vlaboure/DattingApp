@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from '@kolkov/ngx-gallery';
 import { TabsetComponent } from 'ngx-bootstrap/tabs/public_api';
 
+
 @Component({
   selector: 'app-member-detail',
   templateUrl: './member-detail.component.html',
@@ -54,6 +55,9 @@ export class MemberDetailComponent implements OnInit {
   // selectTab(tabId: number) {
   //   this.memberTabs.tabs[tabId].active = true;
   // }
+
+//*************loadUser -> plus nécessaire avec le resolver */
+
   // loadUser(){                       // route.snapshot.params[`id`]--> récupère le paramètre de l'@
   //   this.userService.getUser(+this.route.snapshot.params[`id`]).subscribe((user: User) =>{
   //     this.user = user;

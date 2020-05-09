@@ -45,13 +45,12 @@ namespace DattingApp.api.Controllers
             if (await _rep.UserExists(userForRegisterDto.UserName))//utilisation du repo AuthRepository
                 return BadRequest("user exists");
 
-            var userToCreate = new User
-            {
-                UserName = userForRegisterDto.UserName,
-            };
+            var userToCreate = _mapper.Map<User>(userForRegisterDto);
             //utilisation du repo AuthRepository
             var createdUser = await _rep.Register(userToCreate, userForRegisterDto.Password);
-            return StatusCode(201);
+            var userToReturn = _mapper.Map<UserForDetailDto>(createdUser);
+            
+            return CreatedAtRoute("GetUser", new{Controller="Users",Id = createdUser.Id}, userToReturn);
         }
 
         [HttpPost("login")]

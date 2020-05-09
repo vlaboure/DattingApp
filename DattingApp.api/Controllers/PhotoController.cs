@@ -127,5 +127,40 @@ namespace DattingApp.api.Controllers
                 return NoContent();
             return BadRequest("Erreur lors du chargment de la photo de profil");    
         }
+
+        [HttpDelete ("{id}")]
+        public async Task<IActionResult> DeletePhoto(int userId, int id)
+        {
+            // idem SetMainPhoto
+             //même code que dans userController
+            // vérif si le token correspond à l'id reçu dans la requête
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
+                return Unauthorized();
+           
+            var userFromRepo = await _repo.GetUser(userId);
+            if(!userFromRepo.Photos.Any(p =>p.Id == id))
+                return Unauthorized("Photo non trouvée");
+            
+            // récupération de la photo choisie
+            var photoFromRepo = await _repo.GetPhoto(id);
+            if(photoFromRepo.IsMain)
+               return BadRequest("Impossible de supprimer sa photo de profil");
+                // si la photo provient de cloudinary
+            if (photoFromRepo.PublicId !=null)
+            {
+                var deletionParams = new DeletionParams(photoFromRepo.PublicId);
+                var result = _cloudinary.Destroy(deletionParams);
+                if(result.Result == "ok")
+                    _repo.Delete(photoFromRepo);
+                
+            };   
+            if (photoFromRepo.PublicId ==null)
+            {
+                 _repo.Delete(photoFromRepo);
+            }   
+            if(await _repo.SaveAll())
+                return Ok();
+            return BadRequest("Erreur durant la suppression");
+        }
     }
 }

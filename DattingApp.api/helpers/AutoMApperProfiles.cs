@@ -5,14 +5,15 @@ using DattingApp.api.Models;
 
 namespace DattingApp.api.helpers
 {
-    public class AutoMApperProfiles : Profile
+    public class AutoMapperProfiles : Profile
     {
-        public AutoMApperProfiles()
+        public AutoMapperProfiles()
         {
             // création de mapp entre les classes
             CreateMap<User,UserForDetailDto>()   
                 .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => 
                             src.Photos.FirstOrDefault(p => p.IsMain).Url))
+                // utilisatation de this.CalcAge pour transformer date naissance en age 
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => 
                             src.DateOfBirth.CalcAge()));            
             CreateMap<User,UserForListDto>()
@@ -24,7 +25,8 @@ namespace DattingApp.api.helpers
             CreateMap<UserForUpdateDto,User>();  //source - destination     
             CreateMap<Photo,PhotoForReturnDto>();//source - destination
             CreateMap<PhotoForCreationDto,Photo>();
-      //      CreateMap<UserForListDto,User>();
+            CreateMap<UsersForRegisterDto,User>();
+            
         }
     }
 }
