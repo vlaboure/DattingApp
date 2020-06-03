@@ -11,6 +11,7 @@ import { AuthService } from '../_services/auth.service';
 export class MemberEditResolver implements Resolve<User>{
    constructor(private userService: UserService, private router: Router, private authService: AuthService,
                private alertify: AlertifyService){}
+               
    resolve(route: ActivatedRouteSnapshot): Observable<User>{
       /** le
        * new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),

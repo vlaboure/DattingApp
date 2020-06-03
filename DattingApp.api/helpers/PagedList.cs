@@ -16,10 +16,10 @@ namespace DattingApp.api.helpers
         public int TotalCount { get; set; }
         
         // méthode pour renseigner les propriétés et ajouter une item à la classe 
-        public PagedList(List<T>items, int current, int size, int count)
+        public PagedList(List<T>items, int count, int current, int size)
         {
             CurrentPage = current;
-            TotalPages = (int)Math.Ceiling(Count/(double)size);
+            TotalPages = (int)Math.Ceiling(count/(double)size);
             PageSize = size;
             TotalCount = count;
             this.AddRange(items);
@@ -28,15 +28,16 @@ namespace DattingApp.api.helpers
         // methode pour retourner un objet de type PagedList
         // IQueryable pour le linq dans l'objet passé dans source 
         // taille page et page courrante 
+                                        // IQueryable pour les requêtes Linq
         public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source,
-                     int pageSize, int page)
+                     int page, int pageSize)
         {
             // nombre d'éléments
             var count = await source.CountAsync();
             // Skip (depart).Take(nombre d'éléments)
             var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             // retour de l'objet
-            return new PagedList<T>(items, page, pageSize, count);
+            return new PagedList<T>(items, count, page , pageSize);
         }
     }
 }

@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
  // @Input() valuesFromHome;
+    // communication enfant -->parent
   @Output() cancelRegister = new EventEmitter(); 
   user: User;
   registerForm: FormGroup;

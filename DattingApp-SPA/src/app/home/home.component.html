@@ -11,6 +11,7 @@
   <div *ngIf="registerMode" class="container">
     <div class="row justify-content-center">
       <div class="col-4">
+          <!-- si click sur register appel de register.component -->
         <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
             <!-- version avec option / relation parent enfant ramenant à api.values -->
         <!-- <app-register [valuesFromHome] = "values" (cancelRegister)="cancelRegisterMode($event)"></app-register> -->

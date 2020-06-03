@@ -22,6 +22,8 @@ namespace DattingApp.api.Controllers
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
+                            // injection de IAuthRepository et AutoMapper et IConfiguration
+                            //services.AddScoped et services. AddAutoMapper
         public AuthController(IAuthRepository rep, IConfiguration config, IMapper mapper)
         {
             _mapper = mapper;

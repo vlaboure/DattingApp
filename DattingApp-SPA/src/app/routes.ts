@@ -10,6 +10,7 @@ import { MemberListResolver } from './_resolver/member-list-resolver';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { MemberEditResolver } from './_resolver/member-edit-resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes';
+import { ListResolver } from './_resolver/list-resolver';
 
 
 // tableau de routes
@@ -23,7 +24,7 @@ export const appRoutes: Routes = [
             {path : 'messages', component: MessagesComponent},
             {path : 'members/edit', component: MemberEditComponent,
                     resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges]},
-            {path : 'lists', component: ListsComponent},
+            {path : 'lists', component: ListsComponent,resolve : {users : ListResolver}},
             // appel du resolver dans la route pour récuperer les datas du user
             {path : 'members/:id', component : MemberDetailComponent, resolve: {user: MemberDetailResolver}}
         ]

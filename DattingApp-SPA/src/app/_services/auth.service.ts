@@ -54,6 +54,7 @@ changeMemberPhoto(photoUrl: string){
   }
 
   register(user: User){
+    // requête post à l'api
     return this.Http.post(this.baseUrl + 'register', user);
   }
 

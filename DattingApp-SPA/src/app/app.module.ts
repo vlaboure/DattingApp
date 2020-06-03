@@ -1,6 +1,7 @@
 import { BrowserModule, HammerGestureConfig, enableDebugTools, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { TimeagoModule } from 'ngx-timeago';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import { HttpClientModule } from '@angular/common/Http';
@@ -33,6 +34,7 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
 import { MemberEditResolver } from './_resolver/member-edit-resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
+import { ListResolver } from './_resolver/list-resolver';
 //import { TimeAgoObsPipe } from './_services/TimeAgoObsPipe';
 
 
@@ -78,6 +80,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
       TabsModule.forRoot(),
+      PaginationModule.forRoot(),
       ReactiveFormsModule,
       RouterModule.forRoot(appRoutes),
       FileUploadModule,
@@ -101,6 +104,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MemberDetailResolver,
       MemberListResolver,
       MemberEditResolver,
+      ListResolver,
       PreventUnsavedChanges,
       {provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig}
    ]

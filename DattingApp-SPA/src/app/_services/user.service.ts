@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/Http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/Http';
 import { Observable } from 'rxjs';
 import { User } from '../_models/User';
+import { PaginatedResult } from '../_models/pagination';
+import { map } from 'rxjs/operators';
 
 /**
  * création d'un header pour autorisations pour les requêtes get
@@ -22,11 +24,57 @@ export class UserService {
   baseUrl = environment.apiUrl;
 constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<User[]>{
+// retourne un objet contenant le result--> contenu passé dans la requete
+                            // l'interface pagination-->
+                            /*currentPage: number;
+                              itemsPerPage: number;
+                              totalItems: number;
+                              totalPages: number; */
+
+  getUsers(page?, itemsPerPage?, userParams?,likesParam?): Observable<PaginatedResult<User[]>>{
     // il faut typer le retrun <User[]>car get retourne un object et pas un user
     // si pas de  JwtModule.forRoot dans app.module--> get doit contenir option pour token
-    return this.http.get<User[]>(environment.apiUrl + 'users');
+    const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
+    let params = new HttpParams();
+    if(page!= null && itemsPerPage!= null){
+      // pageNumber de params.cs
+      params = params.append('pageNumber',page);
+      // pageSize de params.cs
+      params = params.append('pageSize',itemsPerPage);
+    }
+
+    if(userParams != null){
+      params = params.append('minAge', userParams.minAge);
+      params = params.append('maxAge', userParams.maxAge);
+      params = params.append('gender', userParams.gender);
+    }
+
+    if(likesParam === 'Likers'){
+      params = params.append('Likers', 'true');
+      console.log('likers---- service');
+    }  
+    if(likesParam === 'Likees'){
+      console.log('likees---- service');
+      params = params.append('Likees', 'true');
+    }  
+    // environment.apiUrl--> 'http://localhost:5000/api/'
+    return this.http
+    .get<User[]>(environment.apiUrl + 'users', {observe: 'response',params})
+    .pipe(
+      // map en retour :
+      // on récupère le header --> paginatedResult.result = response.body
+      //                       --> paginatedResult.pagination = JSON....      
+      map(response=>{
+        paginatedResult.result = response.body;
+        if (response.headers.get('Pagination') != null){
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+        return paginatedResult;
+      })
+    );
   }
+
+
   getUser(id: number): Observable<User>{
     // il faut typer le retrun <User[]>car get retourne un object et pas un user
         // si pas de  JwtModule.forRoot dans app.module--> get doit contenir option pour token
@@ -44,4 +92,9 @@ constructor(private http: HttpClient) { }
   deletePhoto(userId: number, id: number){
     return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + id);
   }
+
+  sendLike(id: number, receptId : number){
+    return this.http.post(this.baseUrl + 'users/' + id + '/like/' + receptId, {});
+  }
+
 }

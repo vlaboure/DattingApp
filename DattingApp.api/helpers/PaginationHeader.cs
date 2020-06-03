@@ -4,14 +4,13 @@ namespace DattingApp.api.helpers
     public class PaginationHeader
     {
         public int CurrentPage { get; set; }
-        public int ItemPerPage { get; set; }
+        public int ItemsPerPage { get; set; }
         public int TotalItems { get; set; }
         public int TotalPages { get; set; }
-
         public PaginationHeader(int current, int item, int totItems, int totPages)
         {
             CurrentPage = current;
-            ItemPerPage = item;
+            ItemsPerPage = item;
             TotalItems = totItems;
             TotalPages = totPages;
         }
