@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { User } from '../_models/User';
 import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { JsonPipe } from '@angular/common';
 
 /**
  * création d'un header pour autorisations pour les requêtes get
@@ -51,10 +53,8 @@ constructor(private http: HttpClient) { }
 
     if(likesParam === 'Likers'){
       params = params.append('Likers', 'true');
-      console.log('likers---- service');
     }  
     if(likesParam === 'Likees'){
-      console.log('likees---- service');
       params = params.append('Likees', 'true');
     }  
     // environment.apiUrl--> 'http://localhost:5000/api/'
@@ -72,6 +72,32 @@ constructor(private http: HttpClient) { }
         return paginatedResult;
       })
     );
+  }
+
+  /**
+   * Méthode pour récupérer les messages avec pagination
+   */
+  getMessages(id: number, page?, itemsPerPage?, messageContener?){
+    // comme pour getUsers on récupère les info de pagination et le message
+    const paginatedResult: PaginatedResult<Message[]> = new PaginatedResult<Message[]>();
+
+    let params = new HttpParams();
+
+    params.append('messageContener',messageContener);
+
+    if(page != null && itemsPerPage != null){
+      params = params.append('pageNumber', page);
+      params = params.append('pageSize', itemsPerPage);
+    }
+    return this.http.get<Message[]>(environment.apiUrl + 'users/' + id + '/messages',{observe: 'response',params})
+      .pipe(
+        map(response => {
+          paginatedResult.result = response.body;
+          if (response.headers.get('Pagination') != null){
+            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+          }
+        })
+      );
   }
 
 

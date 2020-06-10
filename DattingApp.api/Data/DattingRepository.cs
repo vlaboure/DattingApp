@@ -103,5 +103,40 @@ namespace DattingApp.api.Data
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<Message> GetMessage(int id)
+        {
+            var message = await _context.Messages.FirstOrDefaultAsync(u =>u.Id == id);
+            return message;
+        }
+
+        public Task<PagedList<Message>> GetMessagesForUser(MessageParameters messageParameters)
+        {
+            var messages = _context.Messages
+                .Include(u => u.Sender).ThenInclude(p => p.Photos)
+                .Include(u => u.Recept).ThenInclude(p => p.Photos)
+                .AsQueryable();
+            
+            switch(messageParameters.Contener)
+            {
+                case "Inbox" : 
+                    messages = messages.Where(m => m.ReceptId == messageParameters.UserId);
+                    break;
+                case "Outbox" : 
+                    messages = messages.Where(m => m.SenderId == messageParameters.UserId);
+                    break;
+                default : 
+                    messages = messages.Where(m => m.ReceptId == messageParameters.UserId && m.IsRead == false);
+                    break;                    
+            };
+            messages = messages.OrderByDescending(m =>m.MessageSent);
+
+            return PagedList<Message>.CreateAsync(messages, messageParameters.PageNumber,messageParameters.PageSize);
+        }
+
+        public Task<IEnumerable<Message>> GetMessageThread(int userId, int receptId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

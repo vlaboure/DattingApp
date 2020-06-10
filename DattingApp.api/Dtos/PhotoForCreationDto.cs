@@ -10,7 +10,7 @@ namespace DattingApp.api.Dtos
         public IFormFile File { get; set; }
         public string Description { get; set; }
         public DateTime DateAdded { get; set; }
-        // ID pour le cloud
+        // ID pour le cloudinary
         public string PublicId { get; set; }
 
         public PhotoForCreationDto()

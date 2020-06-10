@@ -34,7 +34,7 @@ namespace DattingApp.api.helpers
         {
             // nombre d'éléments
             var count = await source.CountAsync();
-            // Skip (depart).Take(nombre d'éléments)
+            // Skip (saute (page-1)éléments).Take(nombre d'éléments)
             var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             // retour de l'objet
             return new PagedList<T>(items, count, page , pageSize);

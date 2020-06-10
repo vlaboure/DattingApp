@@ -46,7 +46,6 @@ changeMemberPhoto(photoUrl: string){
           this.currentUser = user.user;
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
           this.changeMemberPhoto(this.currentUser.photoUrl);
-
         }
       })
     // tslint:disable-next-line: semicolon

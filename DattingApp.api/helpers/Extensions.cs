@@ -1,10 +1,17 @@
 using System;
+using System.Security.Claims;
+using DattingApp.api.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+ /*
+    classe statique contenant des méthodes utilisées par le programme
+ */               
+
 
 namespace DattingApp.api.helpers
 {
+
     public static class Helpers
     {
         public static void AddApplicationHelper(this HttpResponse response,string message)

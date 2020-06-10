@@ -25,6 +25,7 @@ import { MessagesComponent } from './messages/message.component';
 import {AuthGuard} from './_guards/auth.guard';
 import { appRoutes } from './routes';
 import {UserService} from './_services/user.service';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { MemberCardComponent } from './members/member-card/member-card.component';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { AlertifyService } from './_services/alertify.service';
@@ -81,6 +82,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       BsDropdownModule.forRoot(),
       TabsModule.forRoot(),
       PaginationModule.forRoot(),
+      ButtonsModule.forRoot(),
       ReactiveFormsModule,
       RouterModule.forRoot(appRoutes),
       FileUploadModule,

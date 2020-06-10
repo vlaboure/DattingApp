@@ -23,3 +23,4 @@ export class MemberCardComponent implements OnInit {
       error =>{this.alertifyService.error("error au like "+ error)});
   }
 }
+

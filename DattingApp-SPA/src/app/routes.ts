@@ -20,16 +20,17 @@ export const appRoutes: Routes = [
         runGuardsAndResolvers: 'always',
         canActivate: [AuthGuard],
         children:[
-            {path : 'members', component: MemberListComponent, resolve: {users: MemberListResolver}},
+            {path : 'members', component: MemberListComponent, 
+                    resolve: {users: MemberListResolver}},
             {path : 'messages', component: MessagesComponent},
             {path : 'members/edit', component: MemberEditComponent,
                     resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges]},
-            {path : 'lists', component: ListsComponent,resolve : {users : ListResolver}},
+            {path : 'lists', component: ListsComponent, resolve : {users : ListResolver}},
             // appel du resolver dans la route pour récuperer les datas du user
             {path : 'members/:id', component : MemberDetailComponent, resolve: {user: MemberDetailResolver}}
         ]
     },       // canActivate [tableau de guards]
 
     // pathMatch: 'full' pour correspondance totale
-    {path : '**', redirectTo: 'home', pathMatch: 'full'}
+   {path : '**', redirectTo: 'home', pathMatch: 'full'}
 ]

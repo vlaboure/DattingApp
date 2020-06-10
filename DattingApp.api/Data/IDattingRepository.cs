@@ -15,5 +15,11 @@ namespace DattingApp.api.Data
          Task<Photo> GetPhoto(int id);
          Task<Photo> GetMainPhotoForUser(int photoId);
          Task<Like> GetLike(int userId, int receptId);
+         // message d'un user
+         Task<Message> GetMessage(int id);
+         // message current user avec paramètres 
+         Task<PagedList<Message>> GetMessagesForUser(MessageParameters messageParameters);
+         // flux de messages entre 2 users
+         Task<IEnumerable<Message>> GetMessageThread(int userId, int receptId);
     }
 }

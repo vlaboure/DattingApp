@@ -71,7 +71,7 @@ namespace DattingApp.api.Controllers
                 {               // methode de cloudinary pour les paramètres de l'image
                     var uploadParams = new ImageUploadParams
                     {           // methode de cloudinary pour les fichiers       
-                        File = new FileDescription(file.Name,stream),                /*initialement :.Gravity("face")*/
+                        File = new FileDescription(file.Name,stream),             /*initialement :.Gravity("face")*/
                         Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
                     };
                     // dans la variable d'image uploadResult on charge les paramètres d'affichage et l'image

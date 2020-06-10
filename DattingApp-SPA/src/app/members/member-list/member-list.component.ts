@@ -45,6 +45,7 @@ export class MemberListComponent implements OnInit {
   }
 
   pageChanged(event: any): void {
+    // page--> propriété de angular html
     this.pagination.currentPage = event.page;
     this.loadUsers();
   }

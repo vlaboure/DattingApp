@@ -45,6 +45,7 @@ namespace DattingApp.api.Controllers
 
             var users = await _repo.GetUsers(parameters);
             // users avec le mapping .Map<destination>(source)
+            // donc IEnumerable de UserForListDto
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
             // appel de la methode de helpers
             // AddPagination comme this on l'appelle avec l'objet courant
@@ -67,8 +68,7 @@ namespace DattingApp.api.Controllers
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
         {
             // vérif si le token correspond à l'id reçu dans la requête
-            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
-                return Unauthorized();
+  
             var userFromRepo = await _repo.GetUser(id);
             // map paramètre source , paramètre dest
             _mapper.Map(userForUpdateDto, userFromRepo);
