@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { User } from '../_models/User';
 import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { JsonPipe } from '@angular/common';
+import { Message } from '../_models/message';
 
 /**
  * création d'un header pour autorisations pour les requêtes get
@@ -89,13 +89,16 @@ constructor(private http: HttpClient) { }
       params = params.append('pageNumber', page);
       params = params.append('pageSize', itemsPerPage);
     }
-    return this.http.get<Message[]>(environment.apiUrl + 'users/' + id + '/messages',{observe: 'response',params})
+    return this.http
+      .get<Message[]>(environment.apiUrl + 'users/' + id + '/messages',{
+        observe: 'response',params})
       .pipe(
         map(response => {
           paginatedResult.result = response.body;
-          if (response.headers.get('Pagination') != null){
+          if (response.headers.get('Pagination') !== null){
             paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
           }
+          return paginatedResult;
         })
       );
   }

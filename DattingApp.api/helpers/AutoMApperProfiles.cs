@@ -22,7 +22,8 @@ namespace DattingApp.api.helpers
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => 
                             src.DateOfBirth.CalcAge()));           
             CreateMap<Photo,PhotoForDetailDto>(); //source - destination    
-            CreateMap<UserForUpdateDto,User>();  //source - destination     
+            CreateMap<UserForUpdateDto,User>();  //source - destination   
+            CreateMap<UserForLoginDto,User>();  
             CreateMap<Photo,PhotoForReturnDto>();//source - destination
             CreateMap<PhotoForCreationDto,Photo>();
             CreateMap<UsersForRegisterDto,User>();

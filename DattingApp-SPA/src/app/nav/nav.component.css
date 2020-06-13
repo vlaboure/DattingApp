@@ -7,3 +7,7 @@ img{
     display: inline;
     margin-right: 10px;
 }
+.reset{
+    color:white;
+    text-decoration: underline;
+}

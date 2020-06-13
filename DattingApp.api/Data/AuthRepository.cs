@@ -40,14 +40,26 @@ namespace DattingApp.api.Data
         }
 
 
-        public async Task<User> Register(User user, string password)
+        public async Task<User> Register(User user, string password,bool reset)
         {
             byte[] passwordHash, passwordSalt;
             //passwordHash passwordSalt passés par réference
             CreatePassword(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            await _context.Users.AddAsync(user);
+            if(!reset)
+                await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
+        public async Task<User> ResetUser(User user, string password)
+        {
+            byte[] passwordHash, passwordSalt;
+            //passwordHash passwordSalt passés par réference
+            CreatePassword(password, out passwordHash, out passwordSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
             await _context.SaveChangesAsync();
 
             return user;

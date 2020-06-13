@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/Http';
+import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,9 @@ import { HttpClient } from '@angular/common/Http';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  // pour envoi à nav val de regiser
   registerMode = false;
+  reset = false;
  // values: any;
   constructor(private http: HttpClient) { }
 
@@ -19,6 +22,10 @@ export class HomeComponent implements OnInit {
     this.registerMode = true;
   }
 
+  resetPassword(){
+    this.reset = true;
+    console.log(this.reset);
+  }
   // getValues(){
   //   // subscribe car on travaille sur des promesses
   //   this.http.get('http://localhost:5000/api/values').subscribe(response =>{
@@ -28,5 +35,8 @@ export class HomeComponent implements OnInit {
 
     cancelRegisterMode(registerMode: boolean){
       this.registerMode = registerMode;
+    }
+    cancelResetMode(resetMode: boolean){
+      this.reset = resetMode;
     }
 }

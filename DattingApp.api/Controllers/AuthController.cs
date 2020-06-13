@@ -21,14 +21,17 @@ namespace DattingApp.api.Controllers
         private readonly IAuthRepository _rep;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
+        public IDattingRepository _repo {get;}
+
 
                             // injection de IAuthRepository et AutoMapper et IConfiguration
                             //services.AddScoped et services. AddAutoMapper
-        public AuthController(IAuthRepository rep, IConfiguration config, IMapper mapper)
+        public AuthController(IAuthRepository rep, IConfiguration config, IMapper mapper,IDattingRepository repo)
         {
             _mapper = mapper;
             _rep = rep;
             _config = config;
+            _repo = repo;
         }
 
         [HttpPost("register")]
@@ -49,11 +52,30 @@ namespace DattingApp.api.Controllers
 
             var userToCreate = _mapper.Map<User>(userForRegisterDto);
             //utilisation du repo AuthRepository
-            var createdUser = await _rep.Register(userToCreate, userForRegisterDto.Password);
+            var createdUser = await _rep.Register(userToCreate, userForRegisterDto.Password,false);
             var userToReturn = _mapper.Map<UserForDetailDto>(createdUser);
             
             return CreatedAtRoute("GetUser", new{Controller="Users",Id = createdUser.Id}, userToReturn);
         }
+
+        [HttpPut("{id}")]
+            //tentative reset password
+            // NE FONCTIONNE PAS 12/06/2020
+        public async Task<IActionResult> ResetUser(UserForLoginDto userLog)
+        {
+            //recup du user
+            var userToReset = await _repo.GetUserName(userLog.UserName);
+            if(userToReset == null)
+                return Unauthorized(); 
+            userToReset = _mapper.Map(userLog,userToReset );                 
+            var ResetedUser = await _rep.Register(userToReset, userLog.Password, true);     
+            
+            
+            //if(await _repo.SaveAll())
+                return NoContent();      
+           // return BadRequest("Impossible de modifier le mot de passe");
+        }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)

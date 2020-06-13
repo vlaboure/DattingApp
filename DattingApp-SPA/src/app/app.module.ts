@@ -2,7 +2,6 @@ import { BrowserModule, HammerGestureConfig, enableDebugTools, HAMMER_GESTURE_CO
 import { NgModule } from '@angular/core';
 import { TimeagoModule } from 'ngx-timeago';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { TimeAgoPipe } from 'time-ago-pipe';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import { HttpClientModule } from '@angular/common/Http';
 import { JwtModule } from '@auth0/angular-jwt'; // a mettre en tête
@@ -36,7 +35,9 @@ import { MemberEditResolver } from './_resolver/member-edit-resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import { ListResolver } from './_resolver/list-resolver';
+import { MessagesResolver } from './_resolver/messages-resolver';
 //import { TimeAgoObsPipe } from './_services/TimeAgoObsPipe';
+import { ResetComponent } from './reset/reset.component';
 
 
 export function tokenGetter(){
@@ -64,14 +65,13 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MemberCardComponent,
       MemberDetailComponent,
       MemberEditComponent,
-      PhotoEditorComponent
-      //TimeAgoObsPipe,
+      PhotoEditorComponent,
+  //    TimeAgoObsPipe,
+      ResetComponent
    ],
+
    imports: [
-      /****** utilier .froRoot permet de créer un singleton
-       * **** pour n'appliquer le service que sur la route en cours
-       */
-      BrowserModule,
+      /******utilier.froRootpermetdecréerunsingleton\n*****pourn'appliquerleservicesurlarouteencours\n*/
       TimeagoModule.forRoot(),
       HttpClientModule,
       NgxGalleryModule,
@@ -88,12 +88,11 @@ export class CustomHammerConfig extends HammerGestureConfig{
       FileUploadModule,
       JwtModule.forRoot({
          config: {
-           // indique routes autorisées et lancées au demarrage
            tokenGetter,
            whitelistedDomains: ['localhost:5000'],
            blacklistedRoutes: ['localhost:5000/api/auth']
          }
-      })
+       })
    ],
    
    bootstrap: [AppComponent],
@@ -106,6 +105,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MemberDetailResolver,
       MemberListResolver,
       MemberEditResolver,
+      MessagesResolver,
       ListResolver,
       PreventUnsavedChanges,
       {provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig}

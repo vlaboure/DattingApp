@@ -12,6 +12,7 @@ namespace DattingApp.api.Data
          Task<bool>SaveAll();
          Task<PagedList<User>> GetUsers(UserParameters parameters);
          Task<User> GetUser(int id);
+         Task<User> GetUserName(string name);
          Task<Photo> GetPhoto(int id);
          Task<Photo> GetMainPhotoForUser(int photoId);
          Task<Like> GetLike(int userId, int receptId);

@@ -11,6 +11,7 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
 import { MemberEditResolver } from './_resolver/member-edit-resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes';
 import { ListResolver } from './_resolver/list-resolver';
+import { MessagesResolver } from './_resolver/messages-resolver';
 
 
 // tableau de routes
@@ -21,11 +22,13 @@ export const appRoutes: Routes = [
         canActivate: [AuthGuard],
         children:[
             {path : 'members', component: MemberListComponent, 
-                    resolve: {users: MemberListResolver}},
-            {path : 'messages', component: MessagesComponent},
+                resolve: {users: MemberListResolver}},
+            {path : 'messages', component: MessagesComponent,
+                resolve: {messages: MessagesResolver}},
             {path : 'members/edit', component: MemberEditComponent,
                     resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges]},
-            {path : 'lists', component: ListsComponent, resolve : {users : ListResolver}},
+            {path : 'lists', component: ListsComponent,
+                resolve : {users : ListResolver}},
             // appel du resolver dans la route pour récuperer les datas du user
             {path : 'members/:id', component : MemberDetailComponent, resolve: {user: MemberDetailResolver}}
         ]

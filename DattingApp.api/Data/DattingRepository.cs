@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DattingApp.api.Dtos;
 using DattingApp.api.helpers;
 using DattingApp.api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,11 @@ namespace DattingApp.api.Data
                     FirstOrDefaultAsync(p=>p.IsMain == true);
         }
 
+        public async Task<User> GetUserName(string name)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserName == name);
+             //userChange;
+        }
         public async Task<Photo> GetPhoto(int id)
         {
             var photo = await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
@@ -101,7 +107,8 @@ namespace DattingApp.api.Data
         }
          public async Task<bool> SaveAll()
         {
-            return await _context.SaveChangesAsync() > 0;
+            var tt =await _context.SaveChangesAsync() > 0;
+            return tt;
         }
 
         public async Task<Message> GetMessage(int id)

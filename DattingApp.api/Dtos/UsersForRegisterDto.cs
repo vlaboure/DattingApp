@@ -24,6 +24,7 @@ namespace DattingApp.api.Dtos
          public string City { get; set; }
          [Required]
          public string Country { get; set; }
+         public bool Reset { get; set; } = false;// pour reset password
 
          UsersForRegisterDto()
          {

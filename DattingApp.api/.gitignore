@@ -1,7 +1,9 @@
 .vs
+.vscode
 bin
 obj
 *.db
 *.txt
 *.docx
 appsettings.json
+alire.txt
