@@ -72,6 +72,7 @@ export class RegisterComponent implements OnInit {
         // assign: méthode js 
         // copie les données d'un objet dans un autre {}
       this.user = Object.assign({}, this.registerForm.value);
+
       // souscription à register de authService
       this.authService.register(this.user).subscribe(() => {
         this.alertify.success('register réussi');

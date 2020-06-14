@@ -14,12 +14,14 @@ export class NavComponent implements OnInit {
   // pour récupérer les valeurs depuis navcomponent.html
   model: any = {};
   photoUrl: string;
+  loged: string;
 
    
   constructor(
     public authService: AuthService,
     private alertify: AlertifyService,
-    private router: Router) { }
+    private router: Router
+    ) { }
 
     // charger la photo user.png avec observable
   ngOnInit() {
@@ -47,6 +49,10 @@ export class NavComponent implements OnInit {
     this.authService.currentUser = null;
     console.log('logged out');
     this.router.navigate(['/home']); 
+  }
+  setLogin(){
+    this.authService.setLogin(this.model);
+    console.log(this.model);
   }
 
 }

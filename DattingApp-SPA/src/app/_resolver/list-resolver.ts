@@ -18,7 +18,7 @@ export class ListResolver implements Resolve<User[]>{
       .pipe(
          catchError(error => {
             this.alertify.error('Erreur lors de la récupération des datas');
-            this.router.navigate(['home']);
+            this.router.navigate(['/home']);
             return of(null); // return of--> return observable of(null)
          })
       );

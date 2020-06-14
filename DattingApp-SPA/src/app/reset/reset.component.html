@@ -1,12 +1,10 @@
 <form [formGroup]="resetForm"(ngSubmit)="resetPassword()">
-  <!-- <div >
-    <label for="{{login}}"></label>
-  </div> -->
-
   <!-- <div class="form-group">
     <!-- && resetForm.get('password').touched supprimé dans chk ngif -->
-
     <div class="form-group">
+      <div >
+        <strong class="row justify-content-center title">Reset mot de passe de {{login}}</strong>
+      </div>
       <!-- && registerForm.get('password').touched supprimé dans chk ngif -->
       <input type="password" 
       [ngClass]="{'is-invalid': resetForm.get('password').errors && 

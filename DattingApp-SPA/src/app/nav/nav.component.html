@@ -54,7 +54,7 @@
   
       <form *ngIf="!loggedIn()" #loginForm="ngForm" class="form-inline my-2 my-lg-0"(ngSubmit)="login()">
         <input class="form-control mr-sm-2" type="text" name="userName" 
-        placeholder="UserName" requiered [(ngModel)]="model.userName">
+        placeholder="UserName" requiered [(ngModel)]="model.userName" (change)="setLogin()">
   
         <input class="form-control mr-sm-2" type="password" name="Password" 
         placeholder="Password" requiered [(ngModel)]="model.Password">

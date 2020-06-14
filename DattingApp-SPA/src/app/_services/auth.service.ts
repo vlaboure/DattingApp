@@ -5,6 +5,7 @@ import {map} from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/User';
+import { templateJitUrl } from '@angular/compiler';
 
 
 /**************************************************************************************************/
@@ -17,6 +18,7 @@ export class AuthService {
   jwtHelper = new JwtHelperService();
   decodedToken: any;
   currentUser: User;
+  private _login;
     // photo par defaut peut être changée et est initalisée au démarrage
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
   currentPhotoUrl = this.photoUrl.asObservable();
@@ -61,5 +63,17 @@ changeMemberPhoto(photoUrl: string){
   loggedIn() {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
+  }
+  setLogin(model: any){
+    this._login = model.userName;
+    console.log(model.userName);
+  }
+  getLogin(){
+    let tp = this._login;
+    this.clearLogin();
+    return tp;
+  }
+  clearLogin(){
+    this._login = undefined;
   }
 }

@@ -18,6 +18,7 @@ export class ResetComponent implements OnInit {
   private router: Router;
   resetForm: FormGroup;
   bsConfig: Partial <BsDatepickerConfig>;
+  login: string;
 
   constructor(public authService: AuthService,
               private alertify: AlertifyService,
@@ -29,6 +30,7 @@ export class ResetComponent implements OnInit {
     containerClass: 'theme-red'
     },
     this.createForm();
+    this.login = this.authService.getLogin();
   }
   createForm() {
     this.resetForm = this.fb.group({
@@ -45,7 +47,7 @@ export class ResetComponent implements OnInit {
   resetPassword(){
     // assigner les valeur dans resetForm à user
     this.user = Object.assign({},this.resetForm.value)
-    this.router.navigate(['/home']);
+    console.log(this.resetForm.value);
   }
 
   cancel(){
@@ -53,4 +55,5 @@ export class ResetComponent implements OnInit {
     this.cancelReset.emit(false);
     console.log('cancelled');
   }
+
 }
