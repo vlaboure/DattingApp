@@ -13,7 +13,7 @@ namespace DattingApp.api.helpers
             set {pageSize = (value > maxPageSize)? maxPageSize : value; }
         }
 
-        public string Contener { get; set; } = "Unread";
+        public string Contener { get; set; }="Unread";
         public int UserId { get; set; }        
     }
 }

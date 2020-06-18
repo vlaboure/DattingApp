@@ -4,11 +4,11 @@ namespace DattingApp.api.Dtos
 {
     public class MessageToReturnDto
     {
-         public int Id { get; set; }
+        public int Id { get; set; }
         public int SenderId { get; set; }
         public string SenderKnownAs { get; set; }
         public string SenderPhotoUrl { get; set; }
-        public string RecipientPhotoUrl { get; set; }
+        public string ReceptPhotoUrl { get; set; }
         public int ReceptId { get; set; }
         public string ReceptKnownAs{ get; set; }
         

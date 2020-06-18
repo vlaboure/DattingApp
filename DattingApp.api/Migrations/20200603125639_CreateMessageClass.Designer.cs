@@ -48,10 +48,10 @@ namespace DattingApp.api.Migrations
                     b.Property<DateTime>("MessageSent")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("ReceptDeleted")
+                    b.Property<bool>("receptDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ReceptId")
+                    b.Property<int>("receptId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("SenderDeleted")
@@ -65,7 +65,7 @@ namespace DattingApp.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceptId");
+                    b.HasIndex("receptId");
 
                     b.HasIndex("SenderId");
 
@@ -184,9 +184,9 @@ namespace DattingApp.api.Migrations
 
             modelBuilder.Entity("DattingApp.api.Models.Message", b =>
                 {
-                    b.HasOne("DattingApp.api.Models.User", "Recept")
+                    b.HasOne("DattingApp.api.Models.User", "recept")
                         .WithMany("MessagesReceived")
-                        .HasForeignKey("ReceptId")
+                        .HasForeignKey("receptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

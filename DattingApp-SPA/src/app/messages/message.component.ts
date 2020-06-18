@@ -14,7 +14,7 @@ import { Pagination, PaginatedResult } from '../_models/pagination';
 export class MessagesComponent implements OnInit {
   messages: Message[];
   pagination: Pagination;
-  messageContener = 'Unread';
+  contener = 'Unread';
 
   constructor(private userService: UserService, private alerify: AlertifyService, 
               private route: ActivatedRoute, private authService: AuthService) { }
@@ -31,7 +31,7 @@ export class MessagesComponent implements OnInit {
     .getMessages(this.authService.decodedToken.nameid, 
       this.pagination.currentPage,
       this.pagination.itemsPerPage,
-      this.messageContener)
+      this.contener)
     .subscribe(
       (res: PaginatedResult<Message[]>) =>{
         this.messages = res.result;
@@ -40,7 +40,8 @@ export class MessagesComponent implements OnInit {
         this.alerify.error(error);
       }
     );
-    console.log(this.messages);
+    console.log('message component');
+    debugger;
   }
 
   pageChanged(event: any): void{

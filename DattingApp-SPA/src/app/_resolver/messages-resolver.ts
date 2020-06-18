@@ -7,18 +7,25 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../_services/auth.service';
 import { Message } from '../_models/message';
+import { debug } from 'console';
 
 @Injectable()
 export class MessagesResolver implements Resolve<Message[]>{
    pageNumber = 1;
    pageSize = 5;
-   messageContener = 'unread';
+   contener = 'Unread';
 
    constructor(private userService: UserService, private router: Router,
                private alertify: AlertifyService, private authService: AuthService){}
+
    resolve(route: ActivatedRouteSnapshot): Observable<Message[]>{
-      return this.userService.getMessages(this.authService.decodedToken.nameid, 
-             this.pageNumber, this.pageSize, this.messageContener)
+      console.log('resolver !!!')
+      return this.userService
+         .getMessages(
+            this.authService.decodedToken.nameid, 
+            this.pageNumber,
+            this.pageSize,
+            this.contener)
       .pipe(
          catchError(error => {
             this.alertify.error('Erreur lors de la récupération des messages');
@@ -27,4 +34,5 @@ export class MessagesResolver implements Resolve<Message[]>{
          })
       );
    }
+   debugger;
 }

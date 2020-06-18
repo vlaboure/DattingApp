@@ -119,6 +119,7 @@ namespace DattingApp.api.Data
 
         public Task<PagedList<Message>> GetMessagesForUser(MessageParameters messageParameters)
         {
+            // asQueryable pour faire des requetes après
             var messages = _context.Messages
                 .Include(u => u.Sender).ThenInclude(p => p.Photos)
                 .Include(u => u.Recept).ThenInclude(p => p.Photos)
@@ -127,13 +128,14 @@ namespace DattingApp.api.Data
             switch(messageParameters.Contener)
             {
                 case "Inbox" : 
-                    messages = messages.Where(m => m.ReceptId == messageParameters.UserId);
+                    messages = messages.Where(m => m.ReceptId == messageParameters.UserId && m.ReceptDeleted == false);
                     break;
                 case "Outbox" : 
-                    messages = messages.Where(m => m.SenderId == messageParameters.UserId);
+                    messages = messages.Where(m => m.SenderId == messageParameters.UserId && m.SenderDeleted == false);
                     break;
                 default : 
-                    messages = messages.Where(m => m.ReceptId == messageParameters.UserId && m.IsRead == false);
+                    messages = messages.Where(m => m.ReceptId == messageParameters.UserId && m.IsRead == false
+                     && m.ReceptDeleted == false);
                     break;                    
             };
             messages = messages.OrderByDescending(m =>m.MessageSent);
@@ -141,9 +143,16 @@ namespace DattingApp.api.Data
             return PagedList<Message>.CreateAsync(messages, messageParameters.PageNumber,messageParameters.PageSize);
         }
 
-        public Task<IEnumerable<Message>> GetMessageThread(int userId, int receptId)
+        public async Task<IEnumerable<Message>> GetMessagesThread(int userId, int receptId)
         {
-            throw new NotImplementedException();
+                var messages = await _context.Messages
+                .Include(u => u.Sender).ThenInclude(p => p.Photos)
+                .Include(u => u.Recept).ThenInclude(p => p.Photos)
+                .Where(m => m.ReceptId == userId && m.SenderId == receptId && m.ReceptDeleted == false
+                        || m.SenderId == userId && m.ReceptId == receptId && m.SenderDeleted == false)
+                .OrderByDescending(m => m.MessageSent)
+                .ToListAsync();   
+                return messages;
         }
     }
 }

@@ -14,20 +14,20 @@ namespace DattingApp.api.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     SenderId = table.Column<int>(nullable: false),
-                    ReceptId = table.Column<int>(nullable: false),
+                    receptId = table.Column<int>(nullable: false),
                     Subject = table.Column<string>(nullable: true),
                     IsRead = table.Column<bool>(nullable: false),
                     MessageSent = table.Column<DateTime>(nullable: false),
                     DateRead = table.Column<DateTime>(nullable: true),
                     SenderDeleted = table.Column<bool>(nullable: false),
-                    ReceptDeleted = table.Column<bool>(nullable: false)
+                    receptDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_ReceptId",
-                        column: x => x.ReceptId,
+                        name: "FK_Messages_Users_receptId",
+                        column: x => x.receptId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -40,9 +40,9 @@ namespace DattingApp.api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ReceptId",
+                name: "IX_Messages_receptId",
                 table: "Messages",
-                column: "ReceptId");
+                column: "receptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_SenderId",

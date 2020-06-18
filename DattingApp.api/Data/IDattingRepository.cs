@@ -21,6 +21,6 @@ namespace DattingApp.api.Data
          // message current user avec paramètres 
          Task<PagedList<Message>> GetMessagesForUser(MessageParameters messageParameters);
          // flux de messages entre 2 users
-         Task<IEnumerable<Message>> GetMessageThread(int userId, int receptId);
+         Task<IEnumerable<Message>> GetMessagesThread(int userId, int receptId);
     }
 }

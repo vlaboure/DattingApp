@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -54,9 +55,21 @@ namespace DattingApp.api.Controllers
             return Ok(messages);
         }
 
+        [HttpGet("thread/{receptId}")]
+        public async Task<IActionResult> GetMessagesThread(int userId, int receptId)
+        {
+                          // verification user autorisé
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
+            return Unauthorized();
+            var messagesFromRepo = await _repo.GetMessagesThread(userId, receptId);
+            var messagesThread = _mapper.Map<IEnumerable<MessageToReturnDto>>(messagesFromRepo);
+            return Ok(messagesThread);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateMessage(int userId, MessageForCreationDto messageForCreationDto)
         {            
+            var senderUser = await _repo.GetUser(userId);
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
             return Unauthorized();
             messageForCreationDto.SenderId = userId;
@@ -70,11 +83,33 @@ namespace DattingApp.api.Controllers
             _repo.Add(message);
 
             if(await _repo.SaveAll())
-            {
+            {                
                 var messageToReturn = _mapper.Map<MessageToReturnDto>(message);
                 return CreatedAtRoute("GetMessage",new{userId, id = message.Id},messageToReturn);
             }
             return BadRequest("impossible d'envoyer le message");
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> DeleteMessage(int id, int userId)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
+            return Unauthorized();
+            var messageFromRepo = await _repo.GetMessage(id);
+            if(messageFromRepo.SenderId == userId)
+                messageFromRepo.SenderDeleted = true;
+            
+            if(messageFromRepo.ReceptId == userId)
+                messageFromRepo.ReceptDeleted = true;
+            
+            if(messageFromRepo.SenderDeleted && messageFromRepo.ReceptDeleted)
+                _repo.Delete(messageFromRepo);
+            
+            if(await _repo.SaveAll())
+            
+                return NoContent();
+            
+            throw new Exception("erreur lors de la suppression du message");
         }
     }
 }

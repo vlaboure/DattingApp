@@ -77,13 +77,13 @@ constructor(private http: HttpClient) { }
   /**
    * Méthode pour récupérer les messages avec pagination
    */
-  getMessages(id: number, page?, itemsPerPage?, messageContener?){
+  getMessages(id: number, page?, itemsPerPage?, contener?){
     // comme pour getUsers on récupère les info de pagination et le message
     const paginatedResult: PaginatedResult<Message[]> = new PaginatedResult<Message[]>();
 
     let params = new HttpParams();
 
-    params.append('messageContener',messageContener);
+    params.append('Contener',contener);
 
     if(page != null && itemsPerPage != null){
       params = params.append('pageNumber', page);
@@ -103,6 +103,14 @@ constructor(private http: HttpClient) { }
       );
   }
 
+  getMessagesThread(id: number, receptId: number){
+    return this.http
+      .get<Message[]>(environment.apiUrl + 'users/' + id + '/messages/thread/' + receptId);
+  }
+
+  deleteMessage(id: number, userId: number){
+    return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id,{});
+  }
 
   getUser(id: number): Observable<User>{
     // il faut typer le retrun <User[]>car get retourne un object et pas un user
@@ -124,6 +132,10 @@ constructor(private http: HttpClient) { }
 
   sendLike(id: number, receptId : number){
     return this.http.post(this.baseUrl + 'users/' + id + '/like/' + receptId, {});
+  }
+
+  sendMessage(id: number, message: Message){
+    return this.http.post(this.baseUrl + 'users/' + id + '/messages', message);
   }
 
 }

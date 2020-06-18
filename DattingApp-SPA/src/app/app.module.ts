@@ -38,6 +38,7 @@ import { ListResolver } from './_resolver/list-resolver';
 import { MessagesResolver } from './_resolver/messages-resolver';
 //import { TimeAgoObsPipe } from './_services/TimeAgoObsPipe';
 import { ResetComponent } from './reset/reset.component';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 
 
 export function tokenGetter(){
@@ -48,7 +49,6 @@ export class CustomHammerConfig extends HammerGestureConfig{
    overrides = {
       pinch: {enable: false},
       rotate: {enable: false}
-
    };
 }
 
@@ -60,13 +60,14 @@ export class CustomHammerConfig extends HammerGestureConfig{
       HomeComponent,
       RegisterComponent,
       MemberListComponent,
+      MemberMessagesComponent,
       ListsComponent,
       MessagesComponent,
       MemberCardComponent,
       MemberDetailComponent,
       MemberEditComponent,
       PhotoEditorComponent,
-  //    TimeAgoObsPipe,
+      //TimeAgoObsPipe,
       ResetComponent
    ],
 
@@ -85,6 +86,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       ButtonsModule.forRoot(),
       ReactiveFormsModule,
       RouterModule.forRoot(appRoutes),
+      TimeagoModule.forRoot(),
       FileUploadModule,
       JwtModule.forRoot({
          config: {
