@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { HomeComponent } from '../home/home.component';
 
 
 
@@ -11,17 +13,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
+  private home: HomeComponent; 
+  constructor(
+    public authService: AuthService,
+    private alertify: AlertifyService,
+    private router: Router    
+    ) { }
   // pour récupérer les valeurs depuis navcomponent.html
   model: any = {};
   photoUrl: string;
   loged: string;
-
-   
-  constructor(
-    public authService: AuthService,
-    private alertify: AlertifyService,
-    private router: Router
-    ) { }
 
     // charger la photo user.png avec observable
   ngOnInit() {
@@ -52,6 +53,13 @@ export class NavComponent implements OnInit {
   }
   setLogin(){
     this.authService.setLogin(this.model);
+    // NavComponent.updateUserStatus.subscribe(res =>{
+    //   this.authService.setLogin(this.model);
+    // })
+    // tslint:disable-next-line: no-debugger
+    debugger;
+  //  this.authService.logOk.next(true);
+    this.home.ngOnInit();
     console.log(this.model);
   }
 

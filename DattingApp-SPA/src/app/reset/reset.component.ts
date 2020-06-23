@@ -15,14 +15,14 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 export class ResetComponent implements OnInit {
   @Output() cancelReset = new EventEmitter(); 
   user: User;
-  private router: Router;
   resetForm: FormGroup;
   bsConfig: Partial <BsDatepickerConfig>;
   login: string;
 
   constructor(public authService: AuthService,
               private alertify: AlertifyService,
-              private fb: FormBuilder
+              private fb: FormBuilder,
+              private router: Router
   ){ }
 
   ngOnInit() {
@@ -46,7 +46,19 @@ export class ResetComponent implements OnInit {
 
   resetPassword(){
     // assigner les valeur dans resetForm à user
-    this.user = Object.assign({},this.resetForm.value)
+    this.user = Object.assign({},this.resetForm.value);
+    this.user.userName = this.login;
+    
+    // tslint:disable-next-line: no-debugger
+    //debugger;
+    this.authService.reset(this.user).subscribe(() => {
+      this.alertify.success('reset réussi');
+      // tslint:disable-next-line: no-debugger
+      //debugger;
+    }, error => 
+    { this.alertify.error(error); },
+    () => this.cancelReset.emit(false));// pour fermer la fenêtre
+    // tslint:disable-next-line: no-debugger
     console.log(this.resetForm.value);
   }
 

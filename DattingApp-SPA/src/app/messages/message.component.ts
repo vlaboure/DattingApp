@@ -40,12 +40,22 @@ export class MessagesComponent implements OnInit {
         this.alerify.error(error);
       }
     );
-    console.log('message component');
-    debugger;
+  }
+
+  deleteMessage(id: number){
+    // equivalant de     (click)="$event.stopPropagation()" dans html
+    event.stopImmediatePropagation();
+    //alertify --> message, fonction de callback
+    this.alerify.confirm('voulez vous vraiment supprimer ce message ?',() =>{
+    this.userService.deleteMessage(id, this.authService.decodedToken.nameid).subscribe(()=>{
+      this.messages.splice(this.messages.findIndex(m => m.id === id),1);
+      this.alerify.success('message supprimé');},error => {this.alerify.error(error); });
+    });
   }
 
   pageChanged(event: any): void{
     this.pagination.currentPage = event.page;
     this.loadMessages();
   }
+
 }

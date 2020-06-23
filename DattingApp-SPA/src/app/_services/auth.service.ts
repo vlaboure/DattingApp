@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/Http';
-import {BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Subject } from 'rxjs';
 import {map} from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
@@ -13,12 +13,15 @@ import { templateJitUrl } from '@angular/compiler';
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class AuthService {
   baseUrl  = environment.apiUrl + 'auth/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
   currentUser: User;
   private _login;
+  logOk = new Subject<boolean>();
     // photo par defaut peut être changée et est initalisée au démarrage
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
   currentPhotoUrl = this.photoUrl.asObservable();
@@ -64,16 +67,26 @@ changeMemberPhoto(photoUrl: string){
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
   }
+
+  
   setLogin(model: any){
     this._login = model.userName;
+    // tslint:disable-next-line: no-debugger
+   // debugger;
     console.log(model.userName);
+
   }
   getLogin(){
     let tp = this._login;
-    this.clearLogin();
+   // this.clearLogin();
     return tp;
   }
   clearLogin(){
     this._login = undefined;
+  }
+  reset(user: User){
+    // tslint:disable-next-line: no-debugger
+    //debugger;
+    return this.Http.put(this.baseUrl + 'resetUser', user);
   }
 }

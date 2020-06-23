@@ -2,6 +2,8 @@ import { Component, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/Http';
 import { EventEmitter } from 'protractor';
 import { AuthService } from '../_services/auth.service';
+import { NavComponent } from '../nav/nav.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,12 +15,19 @@ export class HomeComponent implements OnInit {
   registerMode = false;
   reset = false;
   login:string;
+  logOk:boolean;
+
+
  // values: any;
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
   //  this.getValues();
     this.login = this.authService.getLogin();
+  //  this.authService.logOk.subscribe((logg) => this.logOk);
+    // tslint:disable-next-line: no-debugger
+    debugger;
+    //NavComponent.updateUserStatus.next(true); // here!
   }
 
   registerToggle(){

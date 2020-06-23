@@ -18,7 +18,8 @@
       </div>
     </div>
   </div>
-  <div class="row justify-content-center" *ngIf="login">
+  <div class="row justify-content-center" *ngif="login"> 
+    <!-- *ngIf="login" -->
     <button target="_blank" class="text-link link-help lienMotDePasseOublie"(click)="resetPassword()"
       >mot de passe oublié</button>
   </div>   

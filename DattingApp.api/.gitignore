@@ -6,4 +6,6 @@ obj
 *.txt
 *.docx
 appsettings.json
-alire.txt
+*.txt
+wwwroot
+.node_modules

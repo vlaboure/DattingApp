@@ -34,5 +34,5 @@ export class MessagesResolver implements Resolve<Message[]>{
          })
       );
    }
-   debugger;
+  // debugger;
 }

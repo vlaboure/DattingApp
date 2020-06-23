@@ -4,7 +4,8 @@ using DattingApp.api.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
- /*
+
+/*
     classe statique contenant des méthodes utilisées par le programme
  */               
 
@@ -45,8 +46,9 @@ namespace DattingApp.api.helpers
             if (theDateTime.AddYears(age) > DateTime.Today)
                 age--;
             return age;
-        }
-    }
+        }        
+   }
+
 }
 
 

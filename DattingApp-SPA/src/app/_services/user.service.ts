@@ -83,16 +83,16 @@ constructor(private http: HttpClient) { }
 
     let params = new HttpParams();
 
-    params.append('Contener',contener);
+    params = params.append('Contener', contener);
 
-    if(page != null && itemsPerPage != null){
+    if (page != null && itemsPerPage != null){
       params = params.append('pageNumber', page);
       params = params.append('pageSize', itemsPerPage);
     }
     return this.http
       .get<Message[]>(environment.apiUrl + 'users/' + id + '/messages',{
         observe: 'response',params})
-      .pipe(
+      .pipe( 
         map(response => {
           paginatedResult.result = response.body;
           if (response.headers.get('Pagination') !== null){
@@ -106,10 +106,6 @@ constructor(private http: HttpClient) { }
   getMessagesThread(id: number, receptId: number){
     return this.http
       .get<Message[]>(environment.apiUrl + 'users/' + id + '/messages/thread/' + receptId);
-  }
-
-  deleteMessage(id: number, userId: number){
-    return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id,{});
   }
 
   getUser(id: number): Observable<User>{
@@ -138,4 +134,11 @@ constructor(private http: HttpClient) { }
     return this.http.post(this.baseUrl + 'users/' + id + '/messages', message);
   }
 
+  deleteMessage(id: number, userId: number){
+    return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id,{});
+  }
+  markMessageRead(userId: number, id: number){
+    // on souscrit au service directement dans service car il n'y a rien à renvoyer
+    this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id + '/read',{}).subscribe();
+  }
 }

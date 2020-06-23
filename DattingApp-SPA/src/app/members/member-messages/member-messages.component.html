@@ -29,9 +29,9 @@
           <div class="chat-body">
             <div class="header">             
               <small class="text-muted">
-                <span class="fa fa-clock-o">{{message.messageSent | timeago}}</span>
+                <span class="fa fa-clock-o"> Envoyé {{message.messageSent | timeago}}</span>
                 <span *ngIf="!message.isRead" class="text-danger">(Non lu)</span>               
-                <span *ngIf="message.isRead" class="fa fa-clock-o">{{message.dateRead | timeago}}</span>               
+                <span *ngIf="message.isRead" class="fa fa-clock-o"> lu : {{message.dateRead | timeago}}</span>               
               </small>             
                 <strong class="primary-font float-right">{{message.senderKnownAs}}</strong>
             </div>
@@ -44,7 +44,7 @@
       <form #messageForm="ngForm" (ngSubmit)="messageForm.valid && sendMessage()">
         <div class="input-group">
           <span class="input-group-append">
-            <button class="btn btn-danger" [disabled]="!messageForm.valid"> test </button>
+            <button class="btn btn-light" [disabled]="!messageForm.valid"> Message </button>
           </span>
             <!-- <input class="form-control" cols="40" line="10" name="content" [(ngModel)]=newMessage.content> -->
             <textarea class="form-control" cols="40" line="10" name="content" [(ngModel)]=newMessage.content></textarea>

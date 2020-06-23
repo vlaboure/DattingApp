@@ -70,7 +70,7 @@ namespace DattingApp.api.Controllers
         public async Task<IActionResult> CreateMessage(int userId, MessageForCreationDto messageForCreationDto)
         {            
             var senderUser = await _repo.GetUser(userId);
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
+            if (senderUser.Id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
             return Unauthorized();
             messageForCreationDto.SenderId = userId;
             
@@ -94,7 +94,7 @@ namespace DattingApp.api.Controllers
         public async Task<IActionResult> DeleteMessage(int id, int userId)
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
-            return Unauthorized();
+                return Unauthorized();
             var messageFromRepo = await _repo.GetMessage(id);
             if(messageFromRepo.SenderId == userId)
                 messageFromRepo.SenderDeleted = true;
@@ -110,6 +110,20 @@ namespace DattingApp.api.Controllers
                 return NoContent();
             
             throw new Exception("erreur lors de la suppression du message");
+        }
+
+        [HttpPost("{id}/read")]
+        public async Task<IActionResult> MarkMessageRead(int userId, int id)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) 
+                return Unauthorized();
+            var messageFromRepo = await _repo.GetMessage(id);
+            if (messageFromRepo.ReceptId != userId)
+                return Unauthorized();
+            messageFromRepo.IsRead = true;
+            messageFromRepo.DateRead = DateTime.Now;
+            await _repo.SaveAll();
+            return NoContent();  
         }
     }
 }

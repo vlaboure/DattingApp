@@ -58,7 +58,7 @@ namespace DattingApp.api.Controllers
             return CreatedAtRoute("GetUser", new{Controller="Users",Id = createdUser.Id}, userToReturn);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("resetUser")]
             //tentative reset password
             // NE FONCTIONNE PAS 12/06/2020
         public async Task<IActionResult> ResetUser(UserForLoginDto userLog)
