@@ -52,7 +52,7 @@ namespace DattingApp.api.Data
 
         public async Task<User> GetUser(int id)
         {
-            var user = await _context.Users.Include(p=>p.Photos).FirstOrDefaultAsync(u=>u.Id ==id);
+            var user = await _context.Users.FirstOrDefaultAsync(u=>u.Id ==id);
             return user;
         }
 
@@ -63,7 +63,7 @@ namespace DattingApp.api.Data
             // utilisation de CreateAsync avec le user comme parametre et
             // les pages et taille de page
                                     // AsQuerryable pour le Linq
-            var users = _context.Users.Include(p=>p.Photos).AsQueryable();
+            var users = _context.Users.AsQueryable();
             // faire 2 lignes si pb 
                 users = users.Where(u => u.Id != parameters.UserId);
                 users = users.Where(u => u.Gender == parameters.Gender);
@@ -93,8 +93,6 @@ namespace DattingApp.api.Data
         private async Task<IEnumerable<int>> GetUserLikes(int id, bool likers)
         {
           var user = await _context.Users
-          .Include(x => x.Likers)   
-          .Include(x => x.Likees)
           .FirstOrDefaultAsync(u => u.Id == id);
           if (likers)
           {
@@ -121,8 +119,6 @@ namespace DattingApp.api.Data
         {
             // asQueryable pour faire des requetes après
             var messages = _context.Messages
-                .Include(u => u.Sender).ThenInclude(p => p.Photos)
-                .Include(u => u.Recept).ThenInclude(p => p.Photos)
                 .AsQueryable();
             
             switch(messageParameters.Contener)
@@ -146,8 +142,6 @@ namespace DattingApp.api.Data
         public async Task<IEnumerable<Message>> GetMessagesThread(int userId, int receptId)
         {
                 var messages = await _context.Messages
-                .Include(u => u.Sender).ThenInclude(p => p.Photos)
-                .Include(u => u.Recept).ThenInclude(p => p.Photos)
                 .Where(m => m.ReceptId == userId && m.SenderId == receptId && m.ReceptDeleted == false
                         || m.SenderId == userId && m.ReceptId == receptId && m.SenderDeleted == false)
                 .OrderByDescending(m => m.MessageSent)

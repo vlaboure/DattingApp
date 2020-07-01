@@ -13,7 +13,7 @@ namespace DattingApp.api.Models
 
         public string PublicId { get; set; }
         //liaisons entre photo et user pour permettre la suppression en cascade
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public int UserId { get; set; }
     }
 }

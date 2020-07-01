@@ -36,7 +36,11 @@ namespace DattingApp.api
         public void ConfigureServices(IServiceCollection services)
         {
             // les services sont configurés dans void Configure
-            services.AddDbContext<DataContext>(X=>X.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(X=>
+            {
+                X.UseLazyLoadingProxies();
+                X.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            });
             services.AddControllers().AddNewtonsoftJson(opt=>{
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
