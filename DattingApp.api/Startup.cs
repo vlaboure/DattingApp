@@ -45,7 +45,9 @@ namespace DattingApp.api
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
             services.AddCors();//ajout service pour le passage d'un port à un autre      
-            //le service est configuré dans Data      
+            //le service est configuré dans Data   
+            //--> comme le nuget autoMApper est type injection,    
+            // 
             services.AddAutoMapper(typeof(DattingRepository).Assembly);//ou typeof(Startup)
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddScoped<IAuthRepository,AuthRepository>();

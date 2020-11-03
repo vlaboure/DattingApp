@@ -10,7 +10,7 @@ namespace DattingApp.api.helpers
         public AutoMapperProfiles()
         {
             // création de mapp entre les classes
-            CreateMap<User,UserForDetailDto>()   
+            CreateMap<User,UserForDetailDto>()   //from-- to
                 .ForMember(dest => dest.PhotoUrl, opt => opt
                     .MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url))
                 // utilisatation de this.CalcAge pour transformer date naissance en age 
